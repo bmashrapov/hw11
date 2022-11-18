@@ -70,7 +70,6 @@ public class Main {
             return 3;
         }
     }
-
     public static void main(String[] args) {
         //ex1
         printIsLeapYear(2020);
