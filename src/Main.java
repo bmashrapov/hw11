@@ -2,73 +2,82 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
-    public static boolean isLeapYear (int year) {
-        boolean leapYear;
-        leapYear = ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
-        return leapYear;
+    public static final int CURRENT_YEAR = LocalDate.now().getYear();
+
+    public static void printIsLeapYear(int year) {
+        boolean leapYear = isLeapYear(year);
+        printIsLeapYearResult(year, leapYear);
     }
-    public static int getClientOS (String name){
-        if (name.equals("IOS")){
+
+    private static boolean isLeapYear(int year) {
+        return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+    }
+
+    private static void printIsLeapYearResult(int year, boolean leapYear) {
+        if (leapYear) {
+            System.out.println(year + " год является високосным");
+        } else {
+            System.out.println(year + " год не явялется високосным");
+        }
+    }
+
+    public static void printAppInstallMessage(int clientOS, int clientDeviceYear) {
+        boolean oldDevice = isOldDevice(clientDeviceYear);
+        printAppInstallMessageResult(clientOS, oldDevice);
+    }
+
+    private static String defineClientOS(int clientOS) {
+        if (clientOS == 0) {
+            return "IOS";
+        } else if (clientOS == 1) {
+            return "Android";
+        }
+        return "вашей операционной системы";
+    }
+
+    private static boolean isOldDevice(int clientDeviceYear) {
+        return clientDeviceYear < CURRENT_YEAR;
+    }
+
+    private static void printAppInstallMessageResult(int clientOS, boolean oldDevice) {
+        if (oldDevice) {
+            System.out.println("Установите lite-версию приложения для " + defineClientOS(clientOS) + " по ссылке");
+        } else {
+            System.out.println("Установите приложение для " + defineClientOS(clientOS) + " по ссылке");
+        }
+    }
+
+    public static void printDeliveryDaysAmount(int deliveryDistance) {
+        int deliveryDays = printDeliveryDaysAmountResult(deliveryDistance);
+        if (deliveryDays == 0) {
+            System.out.println("Приносим извинения. Доставка по этому адресу невозможна");
+        } else {
+            System.out.println("Потребуется дней: " + deliveryDays);
+        }
+    }
+
+    private static int printDeliveryDaysAmountResult(int deliveryDistance) {
+        int firstInterval = 20;
+        int secondInterval = 60;
+        int thirdInterval = 100;
+        if (deliveryDistance < 0 || deliveryDistance > thirdInterval) {
             return 0;
-        }return 1;
-    }
-    public static int getClientOSYear (int year) {
-        int currentYear = LocalDate.now().getYear();
-        if (year == currentYear) {
-            return 0;
-        }return 1;
-    }
-    public static int findDeliveryArea(int distance){
-        if (distance < 20){
+        } else if (deliveryDistance < firstInterval) {
             return 1;
-        }else if (distance >= 20 && distance < 60){
+        } else if (deliveryDistance < secondInterval) {
             return 2;
-        } else if (distance>= 60 && distance <100) {
+        } else {
             return 3;
-        }else {
-            return 0;
         }
     }
 
     public static void main(String[] args) {
         //ex1
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Введите год: ");
-        int year = sc.nextInt();
-        if (isLeapYear(year)) {
-            System.out.println(year + " год является высокосным");
-        }else {
-            System.out.println(year + " год не является високосным");
-        }
+        printIsLeapYear(2020);
+
         //ex 2
-        String osName = "Android";
-        int clientOS = getClientOS(osName);
-        int clientOSYear = 2021;
-        clientOSYear = getClientOSYear(clientOSYear);
-        if (clientOS == 0 && clientOSYear == 0) {
-            System.out.println("Установите наше приложение для IOS");
-        }else if (clientOS == 0 && clientOSYear != 0) {
-            System.out.println("Установите наше приложение lite для IOS");
-        }else if (clientOS != 0 && clientOSYear == 0) {
-            System.out.println("Установите наше приложение дляAndroid");
-        }else if (clientOS != 0 && clientOSYear != 0) {
-            System.out.println("Установите наше приложение lite для Android");
-        }
+        printAppInstallMessage(0, 2020);
         //ex3
-        int deliveryDistance = 95;
-        int deliveryArea = findDeliveryArea(deliveryDistance);
-        int deliveryDays = 1;
-        if (deliveryArea == 1) {
-            deliveryDays = deliveryDays;
-            System.out.println("Срок доставки " + deliveryDays + " дней");
-        } else if (deliveryArea == 2) {
-            deliveryDays += deliveryDays;
-            System.out.println("Срок доставки " + deliveryDays + " дней");
-        } else if (deliveryArea == 3) {
-            deliveryDays +=  deliveryDays + 1;
-            System.out.println("Срок доставки " + deliveryDays + " дней");
-        } else {
-            System.out.println("Мы не выполняем доставку дальше, чем на 100км");
-        }
+        printDeliveryDaysAmount(95);
     }
 }
